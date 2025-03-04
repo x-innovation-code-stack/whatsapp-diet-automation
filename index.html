@@ -1273,45 +1273,282 @@
                 <p>Experience the simplicity and effectiveness of our WhatsApp-based assessment</p>
             </div>
 
-            <div class="chat-example">
-                <div class="message system-message clearfix">
-                    <p><strong>Welcome to your personalized diet planning!</strong> I'll guide you through a series of questions to create your custom plan. Simply reply with the NUMBER for each selection.</p>
-                </div>
+            <style>
+                .chat-container {
+                    max-width: 450px;
+                    margin: 0 auto;
+                    background: linear-gradient(135deg, #e6dfd8, #ECE5DD);
+                    border-radius: 15px;
+                    padding: 25px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .chat-header {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                }
+                
+                .chat-avatar {
+                    width: 45px;
+                    height: 45px;
+                    background: var(--primary);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    margin-right: 15px;
+                }
+                
+                .chat-info h3 {
+                    margin: 0;
+                    color: #333;
+                    font-size: 18px;
+                }
+                
+                .chat-info p {
+                    margin: 3px 0 0;
+                    color: #666;
+                    font-size: 14px;
+                }
+                
+                .chat-messages {
+                    max-height: 550px;
+                    overflow-y: auto;
+                    padding-right: 10px;
+                }
+                
+                .message {
+                    max-width: 85%;
+                    margin-bottom: 18px;
+                    clear: both;
+                    position: relative;
+                    animation-duration: 0.5s;
+                    animation-fill-mode: both;
+                    transition: all 0.3s ease;
+                }
+                
+                .message:hover {
+                    transform: translateY(-2px);
+                }
+                
+                @keyframes fadeInLeft {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-30px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+                
+                @keyframes fadeInRight {
+                    from {
+                        opacity: 0;
+                        transform: translateX(30px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+                
+                .system-message {
+                    float: left;
+                    background: white;
+                    border-radius: 0 15px 15px 15px;
+                    padding: 12px 18px;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                    animation-name: fadeInLeft;
+                }
+                
+                .user-message {
+                    float: right;
+                    background: #DCF8C6;
+                    border-radius: 15px 0 15px 15px;
+                    padding: 12px 18px;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                    animation-name: fadeInRight;
+                }
+                
+                .message p {
+                    margin: 0;
+                    line-height: 1.5;
+                }
+                
+                .message p:not(:last-child) {
+                    margin-bottom: 8px;
+                }
+                
+                .message .time {
+                    font-size: 11px;
+                    color: #999;
+                    margin-top: 5px;
+                    display: block;
+                    text-align: right;
+                }
+                
+                .clearfix::after {
+                    content: "";
+                    clear: both;
+                    display: table;
+                }
+                
+                .typing-indicator {
+                    display: inline-block;
+                    position: relative;
+                    padding-left: 20px;
+                    font-size: 14px;
+                    color: #666;
+                    animation: fadeIn 0.5s;
+                }
+                
+                .typing-indicator::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background: var(--primary);
+                    animation: pulse 1.5s infinite;
+                }
+                
+                @keyframes pulse {
+                    0% {
+                        transform: translateY(-50%) scale(0.8);
+                        opacity: 0.5;
+                    }
+                    50% {
+                        transform: translateY(-50%) scale(1);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(-50%) scale(0.8);
+                        opacity: 0.5;
+                    }
+                }
+                
+                .chat-input {
+                    display: flex;
+                    margin-top: 20px;
+                    padding-top: 15px;
+                    border-top: 1px solid rgba(0, 0, 0, 0.1);
+                }
+                
+                .input-field {
+                    flex: 1;
+                    background: white;
+                    border-radius: 20px;
+                    padding: 10px 15px;
+                    border: 1px solid #ddd;
+                    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+                    font-size: 14px;
+                    color: #333;
+                }
+                
+                .send-btn {
+                    width: 40px;
+                    height: 40px;
+                    background: var(--primary);
+                    border: none;
+                    border-radius: 50%;
+                    margin-left: 10px;
+                    color: white;
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                }
+                
+                .send-btn:hover {
+                    background: var(--primary-dark);
+                    transform: scale(1.05);
+                }
+                
+                .message-animation {
+                    animation-delay: calc(var(--i) * 0.15s);
+                }
+            </style>
 
-                <div class="message system-message clearfix">
-                    <p>Let's start with some basic information. Please share your:</p>
-                    <p>- Age<br>- Gender (M/F/Other)</p>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-avatar">N</div>
+                    <div class="chat-info">
+                        <h3>Nutrition Planner</h3>
+                        <p>Online • Personalized Diet Plans</p>
+                    </div>
                 </div>
-
-                <div class="message user-message clearfix">
-                    <p>33, M</p>
+                
+                <div class="chat-messages">
+                    <div class="message system-message clearfix message-animation" style="--i:1;">
+                        <p><strong>Welcome to your personalized diet planning!</strong> I'll guide you through a series of questions to create your custom plan. Simply reply with the NUMBER for each selection.</p>
+                        <span class="time">11:02 AM</span>
+                    </div>
+                    
+                    <div class="message system-message clearfix message-animation" style="--i:2;">
+                        <p>Let's start with some basic information. Please share your:</p>
+                        <p>- Age<br>- Gender (M/F/Other)</p>
+                        <span class="time">11:02 AM</span>
+                    </div>
+                    
+                    <div class="message user-message clearfix message-animation" style="--i:3;">
+                        <p>33, M</p>
+                        <span class="time">11:03 AM</span>
+                    </div>
+                    
+                    <div class="message system-message clearfix message-animation" style="--i:4;">
+                        <p>Thank you! Now I need your height and weight to calculate your nutritional needs:</p>
+                        <p>- Height (cm or ft/in)<br>- Current weight (kg or lbs)<br>- Target weight (if any)</p>
+                        <span class="time">11:03 AM</span>
+                    </div>
+                    
+                    <div class="message user-message clearfix message-animation" style="--i:5;">
+                        <p>5'11", 70kg, 65kg</p>
+                        <span class="time">11:04 AM</span>
+                    </div>
+                    
+                    <div class="message system-message clearfix message-animation" style="--i:6;">
+                        <p>Great! Please select your activity level:</p>
+                        <p>1. Sedentary<br>2. Lightly active<br>3. Moderately active<br>4. Very active<br>5. Extremely active</p>
+                        <span class="time">11:04 AM</span>
+                    </div>
+                    
+                    <div class="message user-message clearfix message-animation" style="--i:7;">
+                        <p>3</p>
+                        <span class="time">11:05 AM</span>
+                    </div>
+                    
+                    <div class="message system-message clearfix message-animation" style="--i:8;">
+                        <p>Do you have any of these health conditions?</p>
+                        <p>1. Diabetes<br>2. Hypertension<br>3. Heart disease<br>4. Kidney issues<br>5. Liver problems<br>6. Digestive disorders<br>7. Hormonal imbalances<br>8. Respiratory issues<br>9. None of the above<br>10. Other (please specify)</p>
+                        <span class="time">11:05 AM</span>
+                    </div>
+                    
+                    <div class="message user-message clearfix message-animation" style="--i:9;">
+                        <p>5, 8</p>
+                        <span class="time">11:06 AM</span>
+                    </div>
+                    
+                    <div class="typing-indicator">Typing...</div>
                 </div>
-
-                <div class="message system-message clearfix">
-                    <p>Thank you! Now I need your height and weight to calculate your nutritional needs:</p>
-                    <p>- Height (cm or ft/in)<br>- Current weight (kg or lbs)<br>- Target weight (if any)</p>
-                </div>
-
-                <div class="message user-message clearfix">
-                    <p>5'11", 70kg, 65kg</p>
-                </div>
-
-                <div class="message system-message clearfix">
-                    <p>Great! Please select your activity level:</p>
-                    <p>1. Sedentary<br>2. Lightly active<br>3. Moderately active<br>4. Very active<br>5. Extremely active</p>
-                </div>
-
-                <div class="message user-message clearfix">
-                    <p>3</p>
-                </div>
-
-                <div class="message system-message clearfix">
-                    <p>Do you have any of these health conditions?</p>
-                    <p>1. Diabetes<br>2. Hypertension<br>3. Heart disease<br>4. Kidney issues<br>5. Liver problems<br>6. Digestive disorders<br>7. Hormonal imbalances<br>8. Respiratory issues<br>9. None of the above<br>10. Other (please specify)</p>
-                </div>
-
-                <div class="message user-message clearfix">
-                    <p>5, 8</p>
+                
+                <div class="chat-input">
+                    <input type="text" class="input-field" placeholder="Type your message here...">
+                    <button class="send-btn">→</button>
                 </div>
             </div>
         </div>
@@ -1324,42 +1561,555 @@
                 <p>See how our system has transformed lives with personalized nutrition planning</p>
             </div>
 
-            <div class="example-journey">
-                <h3>Rahul's Transformation Journey</h3>
-                <p><strong>Profile:</strong> 33-year-old male professional, 5'11", 70kg, vegetarian, with liver and lung issues, hair fall concerns, works evening shifts (6-11pm)</p>
+            <style>
+                .journey-container {
+                    position: relative;
+                    margin: 60px auto;
+                    max-width: 900px;
+                }
+                
+                .client-profile {
+                    background: white;
+                    border-radius: 15px;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+                    padding: 30px;
+                    margin-bottom: 40px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-left: 5px solid var(--primary);
+                    transform: translateY(50px);
+                    opacity: 0;
+                    transition: all 0.8s ease;
+                }
+                
+                .client-profile.animated {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+                
+                .profile-info {
+                    flex: 1;
+                    min-width: 280px;
+                }
+                
+                .profile-avatar {
+                    width: 120px;
+                    height: 120px;
+                    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 40px;
+                    font-weight: bold;
+                    margin: 0 auto 20px;
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+                }
+                
+                .client-profile h3 {
+                    color: var(--primary-dark);
+                    font-size: 1.8rem;
+                    margin-bottom: 15px;
+                }
+                
+                .profile-meta {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0 0 20px 0;
+                }
+                
+                .profile-meta li {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    padding-bottom: 8px;
+                    border-bottom: 1px dashed #eee;
+                }
+                
+                .profile-meta li:last-child {
+                    border-bottom: none;
+                }
+                
+                .meta-icon {
+                    width: 30px;
+                    height: 30px;
+                    background: var(--primary-light);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 15px;
+                    color: white;
+                    font-size: 14px;
+                }
+                
+                .meta-icon svg {
+                    width: 16px;
+                    height: 16px;
+                }
+                
+                .journey-timeline {
+                    position: relative;
+                    padding: 30px 0;
+                }
+                
+                .timeline-line {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 50%;
+                    width: 4px;
+                    background: var(--primary-light);
+                    transform: translateX(-50%);
+                }
+                
+                .timeline-line::before,
+                .timeline-line::after {
+                    content: "";
+                    position: absolute;
+                    left: 50%;
+                    width: 20px;
+                    height: 20px;
+                    background: var(--primary);
+                    border-radius: 50%;
+                    transform: translateX(-50%);
+                }
+                
+                .timeline-line::before {
+                    top: 0;
+                }
+                
+                .timeline-line::after {
+                    bottom: 0;
+                }
+                
+                .timeline-entry {
+                    display: flex;
+                    margin-bottom: 60px;
+                    opacity: 0;
+                    transition: all 0.8s ease;
+                }
+                
+                .timeline-entry.left {
+                    transform: translateX(-50px);
+                }
+                
+                .timeline-entry.right {
+                    flex-direction: row-reverse;
+                    transform: translateX(50px);
+                }
+                
+                .timeline-entry.animated {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                
+                .timeline-content {
+                    flex: 0 0 calc(50% - 30px);
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+                    position: relative;
+                }
+                
+                .timeline-entry.left .timeline-content {
+                    margin-right: 30px;
+                }
+                
+                .timeline-entry.right .timeline-content {
+                    margin-left: 30px;
+                }
+                
+                .timeline-content::after {
+                    content: "";
+                    position: absolute;
+                    top: 30px;
+                    width: 20px;
+                    height: 20px;
+                    transform: rotate(45deg);
+                    background: white;
+                }
+                
+                .timeline-entry.left .timeline-content::after {
+                    right: -10px;
+                }
+                
+                .timeline-entry.right .timeline-content::after {
+                    left: -10px;
+                }
+                
+                .step-indicator {
+                    position: absolute;
+                    top: 30px;
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    z-index: 2;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                }
+                
+                .timeline-entry.left .step-indicator {
+                    left: calc(50% + 20px);
+                    transform: translateX(-50%);
+                }
+                
+                .timeline-entry.right .step-indicator {
+                    right: calc(50% + 20px);
+                    transform: translateX(50%);
+                }
+                
+                .timeline-icon {
+                    width: 70px;
+                    height: 70px;
+                    background: var(--light);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 15px;
+                }
+                
+                .timeline-content h4 {
+                    color: var(--primary-dark);
+                    margin-bottom: 15px;
+                    text-align: center;
+                    font-size: 1.4rem;
+                }
+                
+                .timeline-content p {
+                    color: #555;
+                    line-height: 1.6;
+                }
+                
+                .results-card {
+                    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+                    border-radius: 15px;
+                    padding: 30px;
+                    color: white;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                    text-align: center;
+                    transform: scale(0.9);
+                    opacity: 0;
+                    transition: all 0.8s ease;
+                }
+                
+                .results-card.animated {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                
+                .results-title {
+                    font-size: 1.8rem;
+                    margin-bottom: 20px;
+                }
+                
+                .results-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                    gap: 20px;
+                    margin-top: 30px;
+                }
+                
+                .result-item {
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 10px;
+                    padding: 15px;
+                    text-align: center;
+                    backdrop-filter: blur(5px);
+                }
+                
+                .result-icon {
+                    font-size: 24px;
+                    margin-bottom: 10px;
+                }
+                
+                .result-text {
+                    font-weight: 600;
+                }
+                
+                @media (max-width: 768px) {
+                    .timeline-line {
+                        left: 40px;
+                    }
+                    
+                    .timeline-entry {
+                        flex-direction: row;
+                    }
+                    
+                    .timeline-entry.left,
+                    .timeline-entry.right {
+                        flex-direction: row;
+                    }
+                    
+                    .timeline-content {
+                        flex: 0 0 calc(100% - 80px);
+                    }
+                    
+                    .timeline-entry.left .timeline-content,
+                    .timeline-entry.right .timeline-content {
+                        margin-left: 80px;
+                        margin-right: 0;
+                    }
+                    
+                    .timeline-entry.left .timeline-content::after,
+                    .timeline-entry.right .timeline-content::after {
+                        left: -10px;
+                        right: auto;
+                    }
+                    
+                    .timeline-entry.left .step-indicator,
+                    .timeline-entry.right .step-indicator {
+                        left: 40px;
+                        right: auto;
+                        transform: translateX(-50%);
+                    }
+                }
+            </style>
 
-                <div class="journey-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Initial Assessment</h4>
-                        <p>Rahul completed our WhatsApp assessment, revealing his health conditions, vegetarian diet preference, North Indian cuisine preference, late riser schedule, and goals of weight loss and detoxification over a 3+ month period.</p>
+            <div class="journey-container">
+                <div class="client-profile" id="client-profile">
+                    <div class="profile-info">
+                        <h3>Rahul's Transformation Journey</h3>
+                        <ul class="profile-meta">
+                            <li>
+                                <div class="meta-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <span>33-year-old male professional</span>
+                            </li>
+                            <li>
+                                <div class="meta-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v20M4 12h16"></path>
+                                    </svg>
+                                </div>
+                                <span>5'11", 70kg, target: 65kg</span>
+                            </li>
+                            <li>
+                                <div class="meta-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38"></path>
+                                    </svg>
+                                </div>
+                                <span>Evening shift worker (6-11pm)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-avatar">R</div>
+                        <ul class="profile-meta">
+                            <li>
+                                <div class="meta-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                                    </svg>
+                                </div>
+                                <span>Vegetarian, North Indian cuisine</span>
+                            </li>
+                            <li>
+                                <div class="meta-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                </div>
+                                <span>Liver and lung health issues</span>
+                            </li>
+                            <li>
+                                <div class="meta-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
+                                    </svg>
+                                </div>
+                                <span>Hair fall concerns</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="journey-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Personalized Plan Development</h4>
-                        <p>Our system generated a customized plan featuring 5-6 small meals throughout the day, specific detox protocols, breathing exercises for lung health, hair treatment recommendations, and a progressive smoking reduction strategy.</p>
+                <div class="journey-timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-entry left" id="step1">
+                        <div class="timeline-content">
+                            <div class="timeline-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                            </div>
+                            <h4>Initial Assessment</h4>
+                            <p>Rahul completed our WhatsApp assessment, revealing his health conditions, vegetarian diet preference, North Indian cuisine preference, late riser schedule, and goals of weight loss and detoxification over a 3+ month period.</p>
+                        </div>
+                        <div class="step-indicator">1</div>
+                    </div>
+
+                    <div class="timeline-entry right" id="step2">
+                        <div class="timeline-content">
+                            <div class="timeline-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <h4>Personalized Plan Development</h4>
+                            <p>Our system generated a customized plan featuring 5-6 small meals throughout the day, specific detox protocols, breathing exercises for lung health, hair treatment recommendations, and a progressive smoking reduction strategy.</p>
+                        </div>
+                        <div class="step-indicator">2</div>
+                    </div>
+
+                    <div class="timeline-entry left" id="step3">
+                        <div class="timeline-content">
+                            <div class="timeline-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <h4>Implementation</h4>
+                            <p>The plan was designed around Rahul's schedule with a morning routine including detox procedures, light workouts before his evening shift, and recovery protocols integrated throughout his day.</p>
+                        </div>
+                        <div class="step-indicator">3</div>
+                    </div>
+
+                    <div class="timeline-entry right" id="step4">
+                        <div class="timeline-content">
+                            <div class="timeline-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                                </svg>
+                            </div>
+                            <h4>Ongoing Support</h4>
+                            <p>Throughout his journey, Rahul received daily check-ins, weekly assessments, and monthly adjustments to his plan. This continuous support helped him stay accountable and make consistent progress.</p>
+                        </div>
+                        <div class="step-indicator">4</div>
                     </div>
                 </div>
 
-                <div class="journey-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4>Implementation</h4>
-                        <p>The plan was designed around Rahul's schedule with a morning routine including detox procedures, light workouts before his evening shift, and recovery protocols integrated throughout his day.</p>
-                    </div>
-                </div>
-
-                <div class="journey-step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h4>Results</h4>
-                        <p>After following the program for 3 months, Rahul achieved significant weight reduction, improved liver function markers, reduced hair fall, better sleep quality despite his evening work schedule, and successful smoking cessation.</p>
+                <div class="results-card" id="results-card">
+                    <h3 class="results-title">Transformation Results</h3>
+                    <p>After following the program for 3 months, Rahul achieved significant improvements in multiple health metrics:</p>
+                    
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="result-text">Weight Reduction</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                                    <path d="M4 22h16"></path>
+                                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                                </svg>
+                            </div>
+                            <div class="result-text">Improved Liver Function</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
+                                </svg>
+                            </div>
+                            <div class="result-text">Reduced Hair Fall</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 10.8V2.5"></path>
+                                    <path d="M12 21.5v-4"></path>
+                                    <path d="M4.6 8.4c-.8 1.1-.8 2.5 0 3.6l7.4 9.5 7.4-9.5c.8-1.1.8-2.5 0-3.6L12 0 4.6 8.4z"></path>
+                                </svg>
+                            </div>
+                            <div class="result-text">Better Sleep Quality</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M8 19H5c-1 0-2-1-2-2V7c0-1 1-2 2-2h3"></path>
+                                    <path d="M16 5h3c1 0 2 1 2 2v10c0 1-1 2-2 2h-3"></path>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <line x1="6" y1="12" x2="6" y2="19"></line>
+                                    <line x1="18" y1="12" x2="18" y2="5"></line>
+                                </svg>
+                            </div>
+                            <div class="result-text">Smoking Cessation</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const animateOnScroll = (element, className) => {
+                        if (!element) return;
+                        
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add(className);
+                                    observer.unobserve(entry.target);
+                                }
+                            });
+                        }, {
+                            threshold: 0.2
+                        });
+                        
+                        observer.observe(element);
+                    };
+                    
+                    // Animate client profile
+                    animateOnScroll(document.getElementById('client-profile'), 'animated');
+                    
+                    // Animate timeline steps
+                    animateOnScroll(document.getElementById('step1'), 'animated');
+                    
+                    setTimeout(() => {
+                        animateOnScroll(document.getElementById('step2'), 'animated');
+                    }, 150);
+                    
+                    setTimeout(() => {
+                        animateOnScroll(document.getElementById('step3'), 'animated');
+                    }, 300);
+                    
+                    setTimeout(() => {
+                        animateOnScroll(document.getElementById('step4'), 'animated');
+                    }, 450);
+                    
+                    // Animate results card
+                    setTimeout(() => {
+                        animateOnScroll(document.getElementById('results-card'), 'animated');
+                    }, 600);
+                });
+            </script>
         </div>
     </section>
 
@@ -1579,7 +2329,6 @@
                 <h2>Ready to Transform Your Nutrition Planning?</h2>
                 <p>Implement our WhatsApp Diet Planning System for your clients today</p>
             </div>
-            </div>
 
             <div class="highlight-box" style="margin-top: 30px; text-align: center;">
                 <h3>Begin Your Integration Journey</h3>
@@ -1591,7 +2340,7 @@
 
     <footer>
         <div class="container">
-            <p>WhatsApp Diet Planning System | X-Innovatoin Code Stack</p>
+            <p>WhatsApp Diet Planning System | X-Innovation Code Stack</p>
             <p>© 2025 All Rights Reserved</p>
         </div>
     </footer>
